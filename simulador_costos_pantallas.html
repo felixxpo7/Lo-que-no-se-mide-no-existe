@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Impacto Económico: Costos de la Adicción a las Pantallas</title>
+    <!-- Tailwind CSS para diseño moderno y limpio -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js para gráficos interactivos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .slider-thumb::-webkit-slider-thumb {
+            background: #4f46e5;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased">
+
+    <!-- Navbar / Encabezado -->
+    <header class="bg-slate-900 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
+            <div>
+                <span class="bg-indigo-500 text-xs font-semibold px-2.5 py-1 rounded text-white uppercase tracking-wider">Macroeconomía & Demografía</span>
+                <h1 class="text-2xl md:text-3xl font-bold tracking-tight mt-1">Simulador de Impacto Económico: Costo de las Pantallas</h1>
+                <p class="text-slate-400 text-xs sm:text-sm mt-1">Inspirado en los estudios globales y datos de la Asociación Americana de Optometría descritos por La Nación (2026)</p>
+            </div>
+            <div class="mt-4 md:mt-0 text-right text-xs text-slate-400">
+                <p>Línea de base inicial (2026): <strong>US$ 151.000 Millones/año</strong></p>
+                <p>Pérdida de productividad: <strong>US$ 86.300 Millones/año</strong></p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenedor Principal -->
+    <main class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        
+        <!-- Grid Principal de 3 Columnas (1 de Controles, 2 de Gráficos/Resultados) -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- COLUMNA 1: PANEL DE CONTROL Y PARÁMETROS -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 h-fit">
+                <h2 class="text-lg font-bold text-slate-900 border-b border-slate-100 pb-3 mb-4 flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                    Variables de Proyección
+                </h2>
+                
+                <!-- Parámetro 1 -->
+                <div class="mb-6">
+                    <div class="flex justify-between items-center mb-2">
+                        <label for="growthRate" class="text-sm font-medium text-slate-700">Crecimiento Anual de Adicción</label>
+                        <span id="growthRateVal" class="text-sm font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">3.5%</span>
+                    </div>
+                    <input type="range" id="growthRate" min="0" max="10" step="0.1" value="3.5" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600">
+                    <p class="text-xs text-slate-500 mt-1">Incremento porcentual anual del tiempo en pantalla y su penetración en la fuerza laboral.</p>
+                </div>
+
+                <!-- Parámetro 2 -->
+                <div class="mb-6">
+                    <div class="flex justify-between items-center mb-2">
+                        <label for="mitigationRate" class="text-sm font-medium text-slate-700">Efectividad de Intervenciones</label>
+                        <span id="mitigationRateVal" class="text-sm font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">20%</span>
+                    </div>
+                    <input type="range" id="mitigationRate" min="0" max="100" step="5" value="20" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600">
+                    <p class="text-xs text-slate-500 mt-1">Porcentaje de mitigación del daño gracias a prohibiciones en escuelas (ej. Florida), leyes de desconexión y hábitos saludables ("nudges").</p>
+                </div>
+
+                <!-- Parámetro 3 -->
+                <div class="mb-6">
+                    <div class="flex justify-between items-center mb-2">
+                        <label for="gdpGrowth" class="text-sm font-medium text-slate-700">Crecimiento Económico de EE.UU.</label>
+                        <span id="gdpGrowthVal" class="text-sm font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded">2.2%</span>
+                    </div>
+                    <input type="range" id="gdpGrowth" min="0.5" max="5" step="0.1" value="2.2" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-500">
+                    <p class="text-xs text-slate-500 mt-1">Tasa proyectada del PBI de EE.UU. para comparar el peso relativo del costo digital.</p>
+                </div>
+
+                <!-- Parámetro 4 -->
+                <div class="mb-6">
+                    <div class="flex justify-between items-center mb-2">
+                        <label for="healthCostFactor" class="text-sm font-medium text-slate-700">Multiplicador de Salud Mental</label>
+                        <span id="healthCostFactorVal" class="text-sm font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded">1.2x</span>
+                    </div>
+                    <input type="range" id="healthCostFactor" min="1.0" max="2.0" step="0.1" value="1.2" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-rose-500">
+                    <p class="text-xs text-slate-500 mt-1">Carga financiera extra por depresión severa y miopía en las nuevas generaciones (efecto multiplicador).</p>
+                </div>
+
+                <div class="pt-2 border-t border-slate-100 bg-slate-50 -mx-6 -mb-6 p-6 rounded-b-xl">
+                    <span class="text-xs font-semibold uppercase text-slate-400 block mb-1">Nota Metodológica</span>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        El simulador aplica ecuaciones compuestas lineales y exponenciales para estimar la brecha de productividad y los costos médicos directos e indirectos acumulados hasta el año 2056.
+                    </p>
+                </div>
+            </div>
+
+            <!-- COLUMNA 2 Y 3: CUADRO DE MANDO, GRÁFICOS E INFORME IA -->
+            <div class="lg:col-span-2 space-y-6">
+                
+                <!-- TARJETAS DE MÉTRICAS CLAVE -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+                        <span class="text-xs font-semibold text-slate-400 uppercase">Costo Anual en 2056</span>
+                        <div class="text-2xl font-bold text-slate-900 mt-1" id="metricCost2056">US$ 0.00 M</div>
+                        <p class="text-xs text-slate-500 mt-1">Costo individual indexado por año.</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+                        <span class="text-xs font-semibold text-slate-400 uppercase">Pérdida Acumulada PBI</span>
+                        <div class="text-2xl font-bold text-rose-600 mt-1" id="metricCumulative">US$ 0.00 T</div>
+                        <p class="text-xs text-slate-500 mt-1">Impacto total acumulado (30 años).</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+                        <span class="text-xs font-semibold text-slate-400 uppercase">Impacto Relativo PBI</span>
+                        <div class="text-2xl font-bold text-indigo-600 mt-1" id="metricPbiPercentage">0.00%</div>
+                        <p class="text-xs text-slate-500 mt-1">Proporción del PBI hacia 2056.</p>
+                    </div>
+                </div>
+
+                <!-- CONTENEDOR DEL GRÁFICO -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center justify-between">
+                        <span>Proyección del Costo Económico (Millones de US$)</span>
+                        <span class="text-xs font-normal text-slate-500">Periodo 2026 - 2056</span>
+                    </h3>
+                    <div class="relative w-full h-[320px]">
+                        <canvas id="projectionChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- INFORME GENERADO POR IA (DINÁMICO) -->
+                <div class="bg-indigo-900 text-indigo-100 p-6 rounded-xl shadow-md">
+                    <div class="flex items-center mb-3">
+                        <svg class="w-6 h-6 mr-2 text-indigo-400 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                        <h3 class="text-lg font-bold text-white">Análisis Predictivo de la IA</h3>
+                    </div>
+                    <div id="aiAnalysisText" class="text-sm leading-relaxed space-y-2">
+                        <!-- El texto dinámico se insertará aquí mediante JavaScript -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-100 border-t border-slate-200 mt-12 py-6 text-center text-xs text-slate-500">
+        <p>© 2026 Simulador de Impacto Macroeconómico Digital. Todos los derechos reservados.</p>
+        <p class="mt-1">Diseñado para despliegue en entornos estáticos como GitHub Pages.</p>
+    </footer>
+
+    <!-- LÓGICA DEL SIMULADOR (JAVASCRIPT) -->
+    <script>
+        // Inicialización de datos base (2026)
+        const BASE_COST = 151000; // Millones de USD
+        const BASE_PRODUCTIVITY_LOSS = 86300; // Millones de USD
+        const BASE_US_GDP = 28700000; // Millones de USD estimados para 2026
+        const START_YEAR = 2026;
+        const END_YEAR = 2056;
+
+        // Captura de elementos del DOM
+        const growthInput = document.getElementById('growthRate');
+        const mitigationInput = document.getElementById('mitigationRate');
+        const gdpGrowthInput = document.getElementById('gdpGrowth');
+        const healthInput = document.getElementById('healthCostFactor');
+
+        const growthVal = document.getElementById('growthRateVal');
+        const mitigationVal = document.getElementById('mitigationRateVal');
+        const gdpGrowthVal = document.getElementById('gdpGrowthVal');
+        const healthVal = document.getElementById('healthCostFactorVal');
+
+        const metricCost2056 = document.getElementById('metricCost2056');
+        const metricCumulative = document.getElementById('metricCumulative');
+        const metricPbiPercentage = document.getElementById('metricPbiPercentage');
+        const aiAnalysisText = document.getElementById('aiAnalysisText');
+
+        let chart;
+
+        // Inicializar el gráfico Chart.js
+        function initChart() {
+            const ctx = document.getElementById('projectionChart').getContext('2d');
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [
+                        {
+                            label: 'Costo Anual Total Mitigado (M USD)',
+                            borderColor: '#4f46e5',
+                            backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            data: [],
+                            tension: 0.1
+                        },
+                        {
+                            label: 'De los cuales: Pérdida de Productividad (M USD)',
+                            borderColor: '#f59e0b',
+                            borderDash: [5, 5],
+                            backgroundColor: 'transparent',
+                            borderWidth: 2,
+                            data: [],
+                            tension: 0.1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: { boxWidth: 12, font: { size: 11 } }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { color: '#64748b' } },
+                        y: { 
+                            grid: { color: '#f1f5f9' },
+                            ticks: { 
+                                color: '#64748b',
+                                callback: function(value) { return 'US$ ' + (value/1000).toFixed(0) + 'K M'; }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Formateadores de números
+        function formatBillions(value) {
+            return 'US$ ' + (value).toLocaleString('es-ES', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' M';
+        }
+
+        function formatTrillions(value) {
+            // Convierte millones a billones en español (Trillions en inglés)
+            const trillions = value / 1000000;
+            return 'US$ ' + trillions.toFixed(2) + ' Billones';
+        }
+
+        // Función para calcular las proyecciones aritméticas
+        function calculateProjections() {
+            const growth = parseFloat(growthInput.value) / 100;
+            const mitigation = parseFloat(mitigationInput.value) / 100;
+            const gdpGrowth = parseFloat(gdpGrowthInput.value) / 100;
+            const healthMultiplier = parseFloat(healthInput.value);
+
+            const years = [];
+            const totalCosts = [];
+            const productivityCosts = [];
+            
+            let currentCost = BASE_COST;
+            let currentProdLoss = BASE_PRODUCTIVITY_LOSS;
+            let currentGdp = BASE_US_GDP;
+            let cumulativeLoss = 0;
+
+            for (let year = START_YEAR; year <= END_YEAR; year++) {
+                years.push(year);
+                
+                // Aplicar impacto del multiplicador de salud al crecimiento vegetativo
+                const annualGrowthFactor = 1 + (growth * healthMultiplier);
+                
+                // Mitigación aplicada anualmente como reducción del impacto marginal
+                const actualCostForYear = currentCost * (1 - mitigation);
+                const actualProdLossForYear = currentProdLoss * (1 - mitigation);
+
+                totalCosts.push(actualCostForYear);
+                productivityCosts.push(actualProdLossForYear);
+                
+                cumulativeLoss += actualCostForYear;
+
+                // Capitalizar valores para el siguiente ciclo anual
+                currentCost *= annualGrowthFactor;
+                currentProdLoss *= annualGrowthFactor;
+                currentGdp *= (1 + gdpGrowth);
+            }
+
+            // Calcular porcentaje final respecto al PBI del 2056
+            const finalPbiPercentage = (totalCosts[totalCosts.length - 1] / currentGdp) * 100;
+
+            // Actualizar tarjetas de métricas
+            metricCost2056.innerText = formatBillions(totalCosts[totalCosts.length - 1]);
+            metricCumulative.innerText = formatTrillions(cumulativeLoss);
+            metricPbiPercentage.innerText = finalPbiPercentage.toFixed(2) + '%';
+
+            // Actualizar Gráfico
+            chart.data.labels = years;
+            chart.data.datasets[0].data = totalCosts;
+            chart.data.datasets[1].data = productivityCosts;
+            chart.refresh ? chart.refresh() : chart.update();
+
+            // Generar Narrativa Dinámica de Inteligencia Artificial
+            generateAiReport(growth, mitigation, finalPbiPercentage, cumulativeLoss);
+        }
+
+        // Función que simula la evaluación cualitativa de un analista/IA
+        function generateAiReport(growth, mitigation, pbiPct, cumulative) {
+            let statusHTML = "";
+            const totalBln = (cumulative / 1000000).toFixed(2);
+
+            if (growth > 0.05 && mitigation < 0.25) {
+                statusHTML = `
+                    <p class="font-semibold text-rose-300">⚠️ ALERTA DE DISRUPCIÓN COGNITIVA CRÍTICA</p>
+                    <p>Si la adicción digital continúa avanzando al ${(growth*100).toFixed(1)}% anual sin políticas robustas de mitigación, la economía de EE.UU. enfrentará una severa crisis de capital humano. El sesgo hacia el 'sedentarismo cognitivo' descrito por Nicholas Carr erosionará sistemáticamente las capacidades de innovación.</p>
+                    <p>Hacia 2056, el costo total absorberá un alarmante <strong>${pbiPct.toFixed(2)}% del PBI nacional</strong>. La reversión irreversible del efecto Flynn consolidará una fuerza laboral con menor capacidad de resolución de problemas complejos, drenando un acumulado de <strong>US$ ${totalBln} billones</strong> en tres décadas.</p>
+                `;
+            } else if (mitigation >= 0.50) {
+                statusHTML = `
+                    <p class="font-semibold text-emerald-400">🛡️ ESCENARIO DE CONTENCIÓN EXITOSA ("Efecto Toy Story 5")</p>
+                    <p>La adopción masiva de regulaciones drásticas en escuelas y entornos de trabajo corporativos, logrando una tasa de mitigación del ${(mitigation*100).toFixed(0)}%, demuestra que las soluciones de diseño institucional funcionan. El equilibrio tecnológico propuesto en la última entrega de Pixar es viable.</p>
+                    <p>Aunque los costos nominales crecen, se estabilizan por debajo del umbral crítico de peligro macroeconómico. Al reducir la ansiedad y mejorar los índices de atención, la pérdida acumulada se reduce drásticamente, salvando miles de millones de dólares en productividad laboral.</p>
+                `;
+            } else {
+                statusHTML = `
+                    <p class="font-semibold text-indigo-200">📊 ESCENARIO BASE O INERCIAL</p>
+                    <p>En este escenario intermedio, la economía convive con una fuga silenciosa de productividad. El tiempo de pantalla sigue restando competitividad, pero es parcialmente compensado por pequeñas intervenciones conductuales o "nudges" cotidianos (tonos de gris, retención de notificaciones).</p>
+                    <p>El costo acumulado de <strong>US$ ${totalBln} billones</strong> representa un lastre constante pero no letal para el PBI. Sin embargo, los investigadores de bienestar conductual recomiendan acelerar las regulaciones para evitar un desplazamiento completo de las habilidades analíticas humanas tradicionales.</p>
+                `;
+            }
+
+            aiAnalysisText.innerHTML = statusHTML;
+        }
+
+        // Vincular los eventos para actualización instantánea (Reactividad)
+        function setupEventListeners() {
+            const controls = [
+                { input: growthInput, output: growthVal, suffix: '%' },
+                { input: mitigationInput, output: mitigationVal, suffix: '%' },
+                { input: gdpGrowthInput, output: gdpGrowthVal, suffix: '%' },
+                { input: healthInput, output: healthVal, suffix: 'x' }
+            ];
+
+            controls.forEach(item => {
+                item.input.addEventListener('input', () => {
+                    item.output.innerText = item.input.value + item.suffix;
+                    calculateProjections();
+                });
+            });
+        }
+
+        // Inicialización al cargar la ventana
+        window.addEventListener('DOMContentLoaded', () => {
+            initChart();
+            setupEventListeners();
+            calculateProjections(); // Carga de datos inicial
+        });
+    </script>
+</body>
+</html>
